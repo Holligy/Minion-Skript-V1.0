@@ -1,0 +1,99 @@
+on block place:
+    if event-block is Warped Nylium:
+    if name of player's tool is "&e&lWheat Minion":
+        set {%event-location%::%player%::minion_mine} to true
+        set {%event-location%::%player%::minion_coord} to location of event-block
+        set  {%event-block%.owner} to player
+        send "&aMinion Placed!"
+        spawn 1 armor stand above event-block
+        set {%event-location%::%player%::armourstand} to last spawned armor stand
+        add  "{ArmorItems:[{id:leather_boots,Count:1},{id:leather_leggings,Count:1},{id:leather_chestplate,Count:1},{id:player_head,Count:1}]}" to nbt of {%event-location%::%player%::armourstand} 
+        add "{ShowArms:1}" to nbt of {%event-location%::%player%::armourstand}
+        add "{Invulnerable:1}" to nbt of {%event-location%::%player%::armourstand}
+        add "{Small:1}" to nbt of {%event-location%::%player%::armourstand}
+        add "{NoBasePlate:1}" to nbt of {%event-location%::%player%::armourstand}
+        set the held item of {%event-location%::%player%::armourstand} to stone hoe
+        while {%event-location%::%player%::minion_mine} is true:
+            add 8 wheat to {%player's uuid%:minionblock}'s inventory
+            set block at block 1 north {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 north east {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 north west {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 south {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 south east {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 east {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 west {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 south west {%event-location%::%player%::minion_coord} to farmland
+            set block at block 1 north 1 up {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 north 1 up east {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 north 1 up west {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 south 1 up {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 south 1 up {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 east 1 up {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 west 1 up {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 south 1 up west {%event-location%::%player%::minion_coord} to wheat
+            set block at block 1 south 1 up east {%event-location%::%player%::minion_coord} to wheat
+            wait 1 second
+            set block at block 1 south 1 up west {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 south 1 up east {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 north 1 up {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 north 1 up east {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 north 1 up west {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 south 1 up {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 south 1 up {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 east 1 up {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 west 1 up {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            set block at block 1 south 1 up west {%event-location%::%player%::minion_coord} to fully grown wheat plant
+            wait 2 seconds
+
+
+on block break:
+    if event-block is Warped Nylium:
+        if {%event-block%.owner} is not player:
+            cancel event
+            send "&cYou can't break that!" to player
+        else if {%event-block%.owner} is player:
+            set {%event-location%::%player%::minion_mine} to false
+            kill {%event-location%::%player%::armourstand}
+            cancel drops
+            wait 1 tick
+            set block at block 1 north 1 up event-location to air
+            set block at block 1 north 1 up east event-location to air
+            set block at block 1 north 1 up west event-location to air
+            set block at block 1 south 1 up event-location to wheat
+            set block at block 1 south 1 up east event-location to air
+            set block at block 1 east 1 up event-location to air
+            set block at block 1 west 1 up event-location to air
+            set block at block 1 south 1 up west event-location to air
+            set block at block 1 north event-location to air
+            set block at block 1 north east event-location to air
+            set block at block 1 north west event-location to air
+            set block at block 1 south event-location to air
+            set block at block 1 south east event-location to air
+            set block at block 1 east event-location to air
+            set block at block 1 west event-location to air
+            set block at block 1 south west event-location to air
+            send "&cMinion Deleted!" to player
+
+
+
+command /minionstorage:
+    permission: minion.storage
+    trigger: 
+        set block at location of player to chest
+        set {%player's uuid%:minionblock} to block at location of player
+
+on block break:
+  if event-block is Warped Nylium:
+    if {%event-block%.owner} is player:
+    set {%event-location%::%player%::minion_coord} to ""
+
+command /wheatminion:
+    permission: minion.spawn
+    trigger: 
+        give player 1 Warped Nylium named "&e&lWheat Minion"
+        
+        
+
+
+
+  
